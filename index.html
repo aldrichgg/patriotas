@@ -2915,7 +2915,7 @@
         const toastContainer = document.getElementById("toastContainer"); function showToast(msg) { const div = document.createElement("div"); div.className = "toast"; div.textContent = msg; toastContainer.prepend(div); setTimeout(() => div.classList.add("show"), 100); setTimeout(() => { div.classList.remove("show"); setTimeout(() => div.remove(), 300); }, 3000); }
         function parseBR(str) { return parseFloat(str.replace(/\./g, "").replace(",", ".")) || 0 }
         let currentRaised = parseBR("13.670,00"), metaVal = parseBR("44.000,00"); const raisedAmount = document.getElementById("raisedAmount"), progressFill = document.getElementById("progressFill"), progressLabel = document.getElementById("progressLabel"); let donorCount = 0; function updateProgress() { raisedAmount.textContent = currentRaised.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); let pct = 0; if (metaVal > 0) { pct = (currentRaised / metaVal) * 100; if (pct > 100) pct = 100 } progressFill.style.width = pct.toFixed(0) + "%"; progressLabel.textContent = pct.toFixed(0) + "%"; }
-        updateProgress(); const donationList = document.getElementById("donationList"); function addDonationCard(name, amount) { const card = document.createElement("div"); card.className = "donation-card"; card.innerHTML =<span>${name}</span><span>R$ ${amount.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span>; donationList.prepend(card); if (donationList.children.length > 20) { donationList.removeChild(donationList.lastChild); } }
+        updateProgress(); const donationList = document.getElementById("donationList"); function addDonationCard(name, amount) { const card = document.createElement("div"); card.className = "donation-card"; card.innerHTML = `<span>${name}</span><span>R$ ${amount.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`; donationList.prepend(card); if (donationList.children.length > 20) { donationList.removeChild(donationList.lastChild); } }
         const donationQueue = [{ name: "Anônimo", amount: 30 }, { name: "Anônimo", amount: 75 }, { name: "Anônimo", amount: 100 }, { name: "Anônimo", amount: 60 }, { name: "Anônimo", amount: 150 }, { name: "Anônimo", amount: 80 }, { name: "Anônimo", amount: 50 }, { name: "Anônimo", amount: 120 }, { name: "Anônimo", amount: 90 }, { name: "Anônimo", amount: 75 }], donationInterval = () => { let i = 0; function fakeDonate() { if (i < donationQueue.length) { let d = donationQueue[i]; currentRaised += d.amount; donorCount++; updateProgress(); showToast(d.name + " doou R$ " + d.amount.toLocaleString("pt-BR")); addDonationCard(d.name, d.amount); i++; setTimeout(fakeDonate, 3e4); } else { i = 0; setTimeout(fakeDonate, 3e4); } } setTimeout(fakeDonate, 5e3); }
         donationInterval(); const shareButton = document.getElementById("shareButton"); if (shareButton) { shareButton.addEventListener("click", () => { const link = window.location.href; if (navigator.share) { navigator.share({ title: document.title, text: "", url: link }).catch(() => { }); } else { alert("Copie o link:\n" + link); } }); }
         const donateButton = document.getElementById("donateButton"), donationModal = document.getElementById("donationModal"), closeDonationModal = document.getElementById("closeDonationModal"); if (donateButton) donateButton.addEventListener("click", () => { donationModal.style.display = "flex"; }); if (closeDonationModal) closeDonationModal.addEventListener("click", () => { donationModal.style.display = "none"; }); window.addEventListener("click", e => { if (e.target === donationModal) donationModal.style.display = "none"; });
@@ -2953,6 +2953,16 @@
       });
     </script>
   </div>
+  
+  <!-- Vercel Analytics: coleta de métricas de forma leve e privativa -->
+  <script>
+    // Cria um buffer de eventos 'va' até o script principal carregar
+    // Isso garante que chamadas a va('event', ...) não sejam perdidas
+    window.va = window.va || function () {
+      (window.vaq = window.vaq || []).push(arguments);
+    };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 
 </html>
