@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obrigado pela doação</title>
+  <link rel="icon" href="https://i.postimg.cc/xdpbpwzq/favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/xdpbpwzq/favicon.png" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root { --fg:#1f2937; --success:#24ca68; --success-2:#16a34a; --border:#e5e7eb; --muted:#f3f4f6; --warning:#f59e0b; }
+    body { background:var(--muted); color:var(--fg); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; margin:0; }
+    .page { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:14px; width:100%; max-width:620px; padding:22px; text-align:left; box-shadow:0 8px 24px rgba(0,0,0,.06); }
+    .banner { background:linear-gradient(90deg, var(--success), var(--success-2)); color:#fff; padding:14px 16px; border-radius:10px; font-weight:800; margin-bottom:14px; text-align:center; }
+    .title { font-size:28px; font-weight:800; margin:10px 0 6px; text-align:center; }
+    .subtitle { margin:0 0 16px; text-align:center; color:#374151; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:12px; }
+    .cardline { border:1px solid var(--border); border-radius:10px; padding:12px; background:#fafafa; }
+    .cardline strong { display:block; font-size:14px; color:#111827; }
+    .cardline span { display:block; color:#374151; margin-top:4px; }
+    .tips { border-left:4px solid var(--success); padding:10px 12px; background:#f0fff5; border-radius:8px; }
+    .btns { display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+    .btn { background:var(--success); color:#fff; border:none; border-radius:10px; padding:12px 16px; font-weight:800; cursor:pointer; }
+    .btn:hover { opacity:.92; }
+    .btn-outline { background:#fff; color:var(--success); border:2px solid var(--success); }
+    .share { text-align:center; color:#374151; font-size:14px; margin-top:12px; }
+  </style>
+  <script>
+    // Evita voltar para o checkout ao usar back
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', function(){ history.pushState(null, '', location.href); });
+  </script>
+</head>
+<body>
+  <main class="page">
+    <article class="card">
+      <div class="banner">✅ Pagamento confirmado com sucesso</div>
+      <h1 class="title">Obrigado, patriota!</h1>
+      <p class="subtitle">Sua doação fará a diferença na mesa de quem está na estrada defendendo o nosso Brasil. 🇧🇷</p>
+
+      <section class="grid">
+        <div class="cardline">
+          <strong>O que acontece agora?</strong>
+          <span>- Sua contribuição já foi registrada e encaminhada para o fundo de apoio aos caminhoneiros.</span>
+          <span>- Em breve, novas atualizações de impacto estarão disponíveis.</span>
+        </div>
+        <div class="cardline tips">
+          <strong>Quer continuar ajudando?</strong>
+          <span>Compartilhe a campanha com amigos e família. Cada R$ 30 representa uma refeição!</span>
+        </div>
+      </section>
+
+      <div class="btns">
+        <button class="btn" onclick="window.location.href='index.html'">Voltar para a página inicial</button>
+        <button class="btn btn-outline" id="shareBtn">Compartilhar</button>
+      </div>
+
+      <div class="share" id="shareHint" style="display:none">Copie e compartilhe: <span id="shareLink"></span></div>
+    </article>
+  </main>
+</body>
+</html>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('shareBtn');
+    if (!btn) return;
+    const hint = document.getElementById('shareHint');
+    const link = document.getElementById('shareLink');
+    const url = (location.origin || '') + (location.pathname || '').replace('obrigado.html','index.html');
+    if (link) link.textContent = url;
+    btn.addEventListener('click', async () => {
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: 'Apoie os caminhoneiros', url });
+        } else if (navigator.clipboard) {
+          await navigator.clipboard.writeText(url);
+          if (hint) hint.style.display = 'block';
+        }
+      } catch {}
+    });
+  });
+</script>
+

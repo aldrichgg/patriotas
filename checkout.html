@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doação PIX | Ambiente Seguro</title>
+  <link rel="icon" href="https://i.postimg.cc/xdpbpwzq/favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/xdpbpwzq/favicon.png" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --fg: #1f2937;
+      --success: #24ca68;
+      --success-contrast: #ffffff;
+      --border: #e5e7eb;
+      --muted: #f3f4f6;
+    }
+
+    body {
+      background: var(--muted);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+      margin: 0;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: start;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 720px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    .banner { background: linear-gradient(90deg, var(--success), #16a34a); color: var(--success-contrast); text-align: center; padding: 12px 14px; border-radius: 10px; font-weight: 800; margin-bottom: 16px; letter-spacing:.2px; }
+    .info {
+      border: 1px solid rgba(36,202,104,.35);
+      background: rgba(36,202,104,.08);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .title { font-weight: 800; font-size: 18px; margin: 0 0 6px; text-align:center; }
+    .qrcode-box {
+      display: flex;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .qrcode-inner {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      min-width: 206px;
+      min-height: 206px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .layout-two { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 700px) { .layout-two { grid-template-columns: 240px 1fr; align-items: start; } .qrcode-box { justify-content: flex-start; } }
+    .row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .row input {
+      flex: 1;
+    }
+    .summary {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 6px 0;
+    }
+    .alert {
+      margin-top: 12px;
+      border: 1px solid #f59e0b66;
+      background: #fef3c7;
+      color: #78350f;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+    .btn-success:disabled { opacity: .7; }
+    .spinner { width: 48px; height: 48px; border: 3px solid #24ca6844; border-top-color: #24ca68; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Extras visuais */
+    .kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 10px; }
+    .kpi { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align:center; }
+    .kpi .v { font-weight: 800; font-size: 16px; }
+    .kpi .l { color: #6b7280; font-size: 12px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <main class="page min-h-screen flex items-start justify-center p-6 sm:p-8 bg-gray-50 text-gray-800">
+    <article class="card w-full max-w-3xl bg-white border border-gray-200 rounded-xl p-4 sm:p-6 shadow-lg">
+      <header class="banner bg-gradient-to-r from-emerald-500 to-green-600 text-white text-center px-4 py-3 rounded-lg font-semibold mb-4">🔒 Ambiente Seguro - Cada valor arrecadado vai direto para alimentar nossos caminhoneiros.</header>
+
+      <section class="info border border-emerald-200 bg-emerald-50 rounded-lg p-4 mb-4 leading-relaxed">
+        <p style="text-align:center; font-weight:700; margin:0">🇧🇷 JUNTOS PELO BRASIL QUE AMAMOS! 🇧🇷</p>
+        <p style="margin:.5rem 0 0">Patriota, sua doação vai direto para alimentar nossos heróis caminhoneiros que lutam pela nossa liberdade.</p>
+        <p style="margin:.4rem 0 0; font-weight:700">Cada R$ 30 = Uma refeição digna para quem defende o nosso Brasil!</p>
+        <ul style="margin:.4rem 0 0 .9rem; padding:0">
+          <li>✋ Não deixe nossos guerreiros passarem fome!</li>
+          <li>🚛 Eles saíram para defender a nossa pátria!</li>
+          <li>🙏 Vamos retribuir esse sacrifício!</li>
+        </ul>
+      </section>
+
+      <h2 class="title text-center font-semibold text-base sm:text-lg mb-2">🧾 Pague escaneando o QRCode ou copie o código PIX</h2>
+      <div class="layout-two grid gap-4 sm:grid-cols-[240px_1fr] items-start">
+        <section class="qrcode-box">
+          <div class="qrcode-inner border border-gray-200 rounded-lg p-3 min-w-[206px] min-h-[206px] flex items-center justify-center">
+            <div id="qrcode"><div class="h-12 w-12 rounded-full border-2 border-emerald-300 border-t-emerald-600 animate-spin"></div></div>
+          </div>
+        </section>
+        <section>
+          <div class="row flex items-center gap-2 w-full mt-2 max-w-[680px] sm:max-w-[720px] mx-auto">
+            <input id="pixInput" class="w-full min-w-0 h-10 border border-gray-300 rounded-md px-3 text-sm" readonly value="Carregando..." aria-label="Código PIX" />
+            <button id="copyBtn" class="h-10 px-4 whitespace-nowrap shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-semibold disabled:opacity-70" disabled>Copiar</button>
+          </div>
+          <div class="kpis grid grid-cols-3 gap-2 mt-3">
+            <div class="kpi bg-gray-50 border border-gray-200 rounded-lg p-2 text-center"><div class="v font-semibold text-base" id="amountLabel">R$ 0,00</div><div class="l text-gray-500 text-xs">Valor</div></div>
+            <div class="kpi bg-gray-50 border border-gray-200 rounded-lg p-2 text-center"><div class="v font-semibold text-base" id="expireLabel">--/--/---- --:--</div><div class="l text-gray-500 text-xs">Válido até</div></div>
+            <div class="kpi bg-gray-50 border border-gray-200 rounded-lg p-2 text-center"><div class="v font-semibold text-base">PIX</div><div class="l text-gray-500 text-xs">Método</div></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="summary border border-gray-200 rounded-lg p-4 mt-3 space-y-1">
+        <div class="summary-row"><div>🔥 Valor:</div><div id="amountLabel_summary" style="font-weight:700">R$ 0,00</div></div>
+        <div class="summary-row"><div>🕒 Válido até:</div><div id="expireLabel_summary">--/--/---- --:--</div></div>
+      </section>
+
+      <aside class="alert bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-center rounded-lg p-3 mt-3">⚠️ URGENTE: Nossos heróis precisam se alimentar HOJE! Após a doação, você receberá a confirmação de que ajudou um verdadeiro patriota!</aside>
+    </article>
+  </main>
+
+  <script>
+    // ---------- Config ----------
+    const SECRET_KEY = '0de67b08-e16c-441f-a049-75e21c517714';
+    const PUBLIC_KEY = '14aa40c2-8483-4408-bd06-ec4ace76ea5e';
+    const API_URL = 'https://app.for4payments.com.br/api/v1';
+
+    const people = [
+      { name: 'Lucas Ferreira',   phone: '(31) 99876-5432', cpf: '395.247.168-04', email: 'lucas.ferreira@gmail.com' },
+      { name: 'Mariana Souza',    phone: '(31) 99765-4321', cpf: '704.318.529-30', email: 'mariana.souza@gmail.com' },
+      { name: 'Pedro Almeida',    phone: '(31) 99654-3210', cpf: '812.439.076-61', email: 'pedro.almeida@gmail.com' },
+      { name: 'Fernanda Oliveira',phone: '(31) 99543-2109', cpf: '527.603.814-92', email: 'fernanda.oliveira@gmail.com' },
+      { name: 'Ricardo Lima',     phone: '(31) 99432-1098', cpf: '183.570.429-15', email: 'ricardo.lima@gmail.com' },
+    ];
+
+    function pickRandomPerson() {
+      return people[Math.floor(Math.random() * people.length)];
+    }
+
+    function brl(amountNumber) {
+      return amountNumber.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function parseAmount() {
+      const url = new URL(window.location.href);
+      const qsAmount = url.searchParams.get('amount');
+      if (qsAmount) {
+        const n = Math.max(1, Math.floor(Number(qsAmount)));
+        return n;
+      }
+      // fallback: try read from pathname like /checkout20.html
+      const m = window.location.pathname.match(/checkout(\d+)/);
+      if (m) return Number(m[1]);
+      return 20; // default
+    }
+
+    function getHeaders() {
+      return {
+        'Authorization': SECRET_KEY,
+        'X-Public-Key': PUBLIC_KEY,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+    }
+
+    async function createPixPayment({ amount, name, email, cpf, phone }) {
+      const amountInCents = Math.round(Number(amount) * 100);
+      const payload = {
+        name,
+        email,
+        cpf: String(cpf).replace(/\D/g, ''),
+        phone: String(phone).replace(/\D/g, ''),
+        paymentMethod: 'PIX',
+        amount: amountInCents,
+        items: [{ title: 'Doação Patriotas', quantity: 1, unitPrice: amountInCents, tangible: false }],
+      };
+      const resp = await fetch(`${API_URL}/transaction.purchase`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(payload),
+      });
+      if (!resp.ok) {
+        const txt = await resp.text().catch(() => '');
+        throw new Error(`Erro na API (${resp.status}): ${resp.statusText} ${txt}`);
+      }
+      return await resp.json();
+    }
+
+    async function checkPaymentStatus(id) {
+      const url = new URL(`${API_URL}/transaction.getPayment`);
+      url.searchParams.set('id', id);
+      const resp = await fetch(url.toString(), { method: 'GET', headers: getHeaders() });
+      if (!resp.ok) return { status: 'pending' };
+      const data = await resp.json();
+      const map = { PENDING: 'pending', PROCESSING: 'pending', APPROVED: 'completed', COMPLETED: 'completed', PAID: 'completed', EXPIRED: 'failed', FAILED: 'failed', CANCELED: 'cancelled', CANCELLED: 'cancelled' };
+      return { status: map[data.status] || 'pending' };
+    }
+
+    function formatDateTimeBR(d) {
+      return d.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+    function setExpireLabelDate(deadline) {
+      const el = document.getElementById('expireLabel');
+      el.textContent = formatDateTimeBR(deadline);
+    }
+
+    function renderQr(text) {
+      const container = document.getElementById('qrcode');
+      container.innerHTML = '';
+      try {
+        if (window.QRCode) {
+          new QRCode(container, { text, width: 192, height: 192, colorDark: '#111827', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+        } else {
+          // Fallback para imagem externa caso a lib não carregue
+          const img = document.createElement('img');
+          img.width = 192; img.height = 192; img.alt = 'QR PIX';
+          img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=' + encodeURIComponent(text);
+          container.appendChild(img);
+        }
+      } catch (err) {
+        // Último fallback
+        const img = document.createElement('img');
+        img.width = 192; img.height = 192; img.alt = 'QR PIX';
+        img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=' + encodeURIComponent(text);
+        container.appendChild(img);
+      }
+    }
+
+    function enableCopy(text) {
+      const btn = document.getElementById('copyBtn');
+      btn.disabled = false;
+      btn.textContent = 'Copiar';
+      btn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = 'Copiado';
+          setTimeout(() => (btn.textContent = 'Copiar'), 1800);
+        } catch {
+          // Fallback
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch {}
+          document.body.removeChild(ta);
+          btn.textContent = 'Copiado';
+          setTimeout(() => (btn.textContent = 'Copiar'), 1800);
+        }
+      };
+    }
+
+    (async function init() {
+      const amount = parseAmount();
+      document.getElementById('amountLabel').textContent = brl(amount);
+      document.getElementById('amountLabel_summary').textContent = brl(amount);
+      // Mostra contagem regressiva de 30min imediatamente
+      const localDeadline = new Date(Date.now() + 30*60*1000);
+      setExpireLabelDate(localDeadline);
+      document.getElementById('expireLabel_summary').textContent = document.getElementById('expireLabel').textContent;
+
+      const person = pickRandomPerson();
+      try {
+        const payment = await createPixPayment({ amount, ...person });
+        const pixCode = payment.pixCode || '';
+        const pixQrCode = payment.pixQrCode || '';
+        document.getElementById('pixInput').value = pixCode || '—';
+        // Mantém o horário fixo definido inicialmente (30 minutos) — não sobrescrever com expiresAt da API
+        document.getElementById('expireLabel_summary').textContent = document.getElementById('expireLabel').textContent;
+        if (pixQrCode) {
+          const container = document.getElementById('qrcode');
+          container.innerHTML = '';
+          const img = document.createElement('img');
+          img.width = 192; img.height = 192; img.alt = 'QR PIX';
+          // aceita data URL ou http(s)
+          if (pixQrCode.startsWith('data:') || pixQrCode.startsWith('http')) {
+            img.src = pixQrCode;
+          } else if (pixQrCode.length > 100) {
+            // tentativa de base64 sem prefixo
+            img.src = 'data:image/png;base64,' + pixQrCode;
+          }
+          if (!img.src) {
+            renderQr(pixCode);
+          } else {
+            container.appendChild(img);
+          }
+        } else if (pixCode) {
+          renderQr(pixCode);
+        }
+        if (pixCode) enableCopy(pixCode);
+
+        const interval = setInterval(async () => {
+          try {
+            const { status } = await checkPaymentStatus(payment.id);
+            if (['completed', 'failed', 'cancelled'].includes(status)) {
+              clearInterval(interval);
+              if (status === 'completed') {
+                window.location.href = 'obrigado.html';
+              }
+            }
+          } catch {}
+        }, 5000);
+
+        setTimeout(() => clearInterval(interval), 30 * 60 * 1000);
+      } catch (e) {
+        console.error('Falha ao gerar PIX:', e);
+        // Exibe feedback inline ao invés de popup
+        const input = document.getElementById('pixInput');
+        input.value = 'Não foi possível gerar o PIX agora. Tente atualizar a página.';
+        document.getElementById('copyBtn').disabled = true;
+      }
+    })();
+  </script>
+</body>
+</html>
+
