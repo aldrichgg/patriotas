@@ -116,6 +116,30 @@
     .kpi .l { color: #6b7280; font-size: 12px; }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1295450562104394');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1295450562104394&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
 </head>
 <body>
   <main class="page min-h-screen flex items-start justify-center p-6 sm:p-8 bg-gray-50 text-gray-800">
@@ -295,6 +319,20 @@
 
     (async function init() {
       const amount = parseAmount();
+      try {
+        if (typeof fbq === 'function') {
+          fbq('track', 'InitiateCheckout', {
+            value: Number(amount),
+            currency: 'BRL',
+            num_items: 1,
+            contents: [
+              { id: 'doacao_pix', quantity: 1, item_price: Number(amount) }
+            ],
+            content_type: 'product',
+            content_name: 'Doação Patriotas'
+          });
+        }
+      } catch {}
       document.getElementById('amountLabel').textContent = brl(amount);
       document.getElementById('amountLabel_summary').textContent = brl(amount);
       // Mostra contagem regressiva de 30min imediatamente
@@ -338,7 +376,21 @@
             if (['completed', 'failed', 'cancelled'].includes(status)) {
               clearInterval(interval);
               if (status === 'completed') {
-                window.location.href = 'obrigado.html';
+                try {
+                  if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase', {
+                      value: Number(amount),
+                      currency: 'BRL',
+                      contents: [
+                        { id: 'doacao_pix', quantity: 1, item_price: Number(amount) }
+                      ],
+                      content_type: 'product',
+                      content_name: 'Doação Patriotas',
+                      order_id: String(payment.id || '')
+                    });
+                  }
+                } catch {}
+                setTimeout(() => { window.location.href = 'obrigado.html'; }, 400);
               }
             }
           } catch {}
